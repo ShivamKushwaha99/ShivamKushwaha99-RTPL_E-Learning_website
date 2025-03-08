@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 80px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .profile-section {
+            display: flex;
+            gap: 30px;
+        }
+        .profile-info {
+            width: 40%;
+            text-align: center;
+        }
+        .edit-profile {
+            width: 60%;
+        }
+        #profileImage {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4CAF50;
+        }
+        .upload-btn {
+            background-color: rgb(213, 206, 206);
+            color: black;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #a12c2f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div id="navbar"></div>
+
+<script>
+    // Load Navbar
+    fetch('navbar.html')
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('navbar').innerHTML = html;
+            loadAuthScript();
+        })
+        .catch(err => console.error('Error loading navbar:', err));
+
+    async function loadAuthScript() {
+        const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+        const { getAuth, onAuthStateChanged, signOut } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+            authDomain: "roshanitechpvttld.firebaseapp.com",
+            projectId: "roshanitechpvttld",
+            storageBucket: "roshanitechpvttld.firebasestorage.app",
+            messagingSenderId: "970133074105",
+            appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+            measurementId: "G-YH98JTDL7W"
+        };
+
+        const auth = getAuth(initializeApp(firebaseConfig));
+
+        onAuthStateChanged(auth, user => {
+            document.getElementById("user-info").classList.toggle("d-none", !user);
+            document.getElementById("login-link").classList.toggle("d-none", user);
+            if (user) document.getElementById("user-name").innerText = user.displayName || "User";
+        });
+
+        document.getElementById("logout-btn").addEventListener("click", async () => {
+            await signOut(auth);
+            localStorage.removeItem("username");
+            window.location.href = "index.html";
+        });
+    }
+</script>
+
+
+
+<!-- Profile Section -->
+<div class="container">
+    <h2 class="text-center mb-4">Edit Profile</h2>
+    <div class="profile-section">
+        <div class="profile-info">
+            <img id="profileImage" src="default-avatar.png" alt="Profile Picture">
+            <p><strong>Name:</strong> <span id="currentName">Loading...</span></p>
+            <p><strong>Phone:</strong> <span id="currentPhone">Loading...</span></p>
+            <input type="file" id="imageUpload" accept="image/*" hidden>
+            <button class="upload-btn" onclick="document.getElementById('imageUpload').click()">📷 Change Photo</button>
+            <button id="uploadBtn">Upload</button>
+        </div>
+        <div class="edit-profile">
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="name">New Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">New Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" pattern="[0-9]{10}">
+                </div>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+    
+   
+
+    const firebaseConfig = {  apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+    authDomain: "roshanitechpvttld.firebaseapp.com",
+    projectId: "roshanitechpvttld",
+    storageBucket: "roshanitechpvttld.firebasestorage.app",
+    messagingSenderId: "970133074105",
+    appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+    measurementId: "G-YH98JTDL7W" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    let selectedFile;
+
+    document.getElementById('profileForm').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent page reload
+
+    const user = auth.currentUser; // Get logged-in user
+    if (!user) {
+        alert("User not logged in!");
+        console.error("No user found. Please check authentication.");
+        return;
+    }
+
+    // Get form values
+    const newName = document.getElementById('name').value;
+    const newPhone = document.getElementById('phone').value;
+
+    console.log("Updating user:", user.uid); // Debugging
+
+    try {
+        // Reference the user's document in Firestore
+        const userRef = doc(db, "users", user.uid);
+        
+        // Update Firestore with new data
+        await updateDoc(userRef, {
+            name: newName,
+            phone: newPhone
+        });
+
+        alert("Profile updated successfully!");
+        console.log("Profile updated for:", user.uid);
+    } catch (error) {
+        console.error("Error updating profile: ", error);
+        alert("Error updating profile.");
+    }
+});
+
+document.getElementById('imageUpload').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const base64String = e.target.result; // Convert image to Base64
+            document.getElementById('profileImage').src = base64String; // Preview image
+
+            const user = auth.currentUser;
+            if (user) {
+                const userRef = doc(db, "users", user.uid);
+                await updateDoc(userRef, { profileImage: base64String }); // Save Base64 image
+                alert('Profile picture updated in Firestore!');
+            } else {
+                alert("User not logged in!");
+            }
+        };
+        reader.readAsDataURL(file); // Convert image to Base64
+    }
+});
+
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+            const userData = userSnap.data();
+            document.getElementById("currentName").innerText = userData.name || "No Name Set";
+            document.getElementById("currentPhone").innerText = userData.phone || "No Phone Set";
+            document.getElementById("profileImage").src = userData.profileImage || "default-avatar.png";
+        } else {
+            console.log("No user data found!");
+        }
+    } else {
+        console.log("No user logged in");
+    }
+}
+    
+);
+
+
+</script>
+ <!-- footer start -->
+ <div id="footer"></div>
+ <script>
+     fetch("footer.html")
+         .then(response => response.text())
+         .then(data => document.getElementById("footer").innerHTML = data);
+ </script>
+<!-- footer end -->
+
+</body>
+</html>

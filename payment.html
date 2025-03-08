@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Gateway</title>
+     <!-- Favicon -->
+     <link href="img/roshni_tech_logo.png" rel="icon">
+
+     <!-- Google Web Fonts -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link
+         href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+         rel="stylesheet">
+ 
+     <!-- Icon Font Stylesheet -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+ 
+     <!-- Libraries Stylesheet -->
+     <link href="lib/animate/animate.min.css" rel="stylesheet">
+     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+ 
+     <!-- Customized Bootstrap Stylesheet -->
+     <link href="css/bootstrap.min.css" rel="stylesheet">
+ 
+     <!-- Template Stylesheet -->
+     <link href="css/style.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            
+            /* padding: 50px; */
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            max-width: 400px;
+            text-align: center;
+            margin-top: 100px;
+            position: relative;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0070f3;
+        }
+        select, button {
+            display: block;
+            width: 100%;
+            margin: 15px 0;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #0070f3;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #005bb5;
+        }
+        #qr-container {
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+        }
+        canvas {
+            margin-top: 10px;
+            border: 5px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            background: white;
+        }
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+            margin-top: 10px;
+        }
+        .payment-method {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .payment-method img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <script>
+        // Load Navbar
+        fetch('navbar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('navbar').innerHTML = html;
+                loadAuthScript();
+            })
+            .catch(err => console.error('Error loading navbar:', err));
+    
+        async function loadAuthScript() {
+            const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+            const { getAuth, onAuthStateChanged, signOut } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+    
+            const firebaseConfig = {
+                apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+                authDomain: "roshanitechpvttld.firebaseapp.com",
+                projectId: "roshanitechpvttld",
+                storageBucket: "roshanitechpvttld.firebasestorage.app",
+                messagingSenderId: "970133074105",
+                appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+                measurementId: "G-YH98JTDL7W"
+            };
+    
+            const auth = getAuth(initializeApp(firebaseConfig));
+    
+            onAuthStateChanged(auth, user => {
+                document.getElementById("user-info").classList.toggle("d-none", !user);
+                document.getElementById("login-link").classList.toggle("d-none", user);
+                if (user) document.getElementById("user-name").innerText = user.displayName || "User";
+            });
+    
+            document.getElementById("logout-btn").addEventListener("click", async () => {
+                await signOut(auth);
+                localStorage.removeItem("username");
+                window.location.href = "index.html";
+            });
+        }
+    </script>
+        
+    <div class="container">
+        <h2>Proceed with Payment</h2>
+        <p>Amount: ₹1,00,000</p>
+        
+        <label for="payment-method">Select Payment Method:</label>
+        <div class="payment-method">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal">
+            <img src="https://cdn.iconscout.com/icon/free/png-256/free-upi-logo-icon-download-in-svg-png-gif-file-formats--unified-payments-interface-payment-money-transfer-logos-icons-1747946.png?f=webp" alt="UPI">
+        </div>
+        <select id="payment-method">
+            <option value="paypal">PayPal</option>
+            <option value="upi">UPI</option>
+        </select>
+        
+        <button id="pay-button">Proceed to Payment</button>
+        
+        <div id="qr-container">
+            <p>Scan this QR Code to Pay:</p>
+            <canvas id="upi-qr"></canvas>
+            <p class="timer" id="timer">Time Left: 02:00</p>
+        </div>
+    </div>
+
+    <script>
+        let countdown;
+        document.getElementById("pay-button").addEventListener("click", function() {
+            const paymentMethod = document.getElementById("payment-method").value;
+            const amount = "100000"; 
+            const payeeName = encodeURIComponent("Roshani Technologies PVT LTD"); 
+            const upiId = "piyushsangada411@okicici";
+            const transactionNote = encodeURIComponent("Course Payment");
+            
+            const upiUrl = `upi://pay?pa=${upiId}&pn=${payeeName}&am=${amount}&cu=INR&tn=${transactionNote}`;
+
+            if (paymentMethod === "paypal") {
+                const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=YOUR_PAYPAL_EMAIL&amount=500&currency_code=INR`;
+                window.open(paypalUrl, "_blank");
+            } else if (paymentMethod === "upi" || paymentMethod === "googlepay") {
+                document.getElementById("qr-container").style.display = "block";
+                new QRious({
+                    element: document.getElementById("upi-qr"),
+                    value: upiUrl,
+                    size: 250
+                });
+                window.location.href = upiUrl;
+                startTimer(300); 
+            }
+        });
+
+        function startTimer(duration) {
+            let timeLeft = duration;
+            countdown = setInterval(function () {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                document.getElementById("timer").textContent = `Time Left: ${minutes}:${seconds}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    alert("Payment link expired.");
+                    location.reload();
+                }
+                timeLeft--;
+            }, 1000);
+        }
+    </script>
+     <!-- footer start -->
+   <div id="footer"></div>
+   <script>
+       fetch("footer.html")
+           .then(response => response.text())
+           .then(data => document.getElementById("footer").innerHTML = data);
+   </script>
+<!-- footer end -->
+</body>
+</html>

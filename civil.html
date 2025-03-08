@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Roshani Technologies : Courses</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/roshni_tech_logo.png" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+     <!-- Navbar Start -->
+     <div id="navbar"></div>
+
+     <script>
+         // Load Navbar
+         fetch('navbar.html')
+             .then(res => res.text())
+             .then(html => {
+                 document.getElementById('navbar').innerHTML = html;
+                 loadAuthScript();
+             })
+             .catch(err => console.error('Error loading navbar:', err));
+     
+         async function loadAuthScript() {
+             const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+             const { getAuth, onAuthStateChanged, signOut } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+     
+             const firebaseConfig = {
+                 apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+                 authDomain: "roshanitechpvttld.firebaseapp.com",
+                 projectId: "roshanitechpvttld",
+                 storageBucket: "roshanitechpvttld.firebasestorage.app",
+                 messagingSenderId: "970133074105",
+                 appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+                 measurementId: "G-YH98JTDL7W"
+             };
+     
+             const auth = getAuth(initializeApp(firebaseConfig));
+     
+             onAuthStateChanged(auth, user => {
+                 document.getElementById("user-info").classList.toggle("d-none", !user);
+                 document.getElementById("login-link").classList.toggle("d-none", user);
+                 if (user) document.getElementById("user-name").innerText = user.displayName || "User";
+             });
+     
+             document.getElementById("logout-btn").addEventListener("click", async () => {
+                 await signOut(auth);
+                 localStorage.removeItem("username");
+                 window.location.href = "index.html";
+             });
+         }
+     </script>
+    
+    <!-- Navbar End -->
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Courses</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="index.html">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="courses.html">Courses</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Civil</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+             <!-- Placeholder for Authorized Dealers Slider -->
+<div id="authorized-dealer-slider"></div>
+
+<script>
+  // Load Authorized Dealers Slider
+  fetch('/authorizeddealer.html') // Adjust the path as needed
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('authorized-dealer-slider').innerHTML = data;
+    })
+    .catch(error => console.error('Error loading the slider:', error));
+</script>
+  
+   <!--Authorized Dealers Slider end -->
+
+    <!-- Courses Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5" style="color: #a12c2f;">Civil Courses</h1>
+            </div>
+            <div class="row g-4 py-2">
+                <!-- Course 1 -->
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_Civil_3D.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/Autodesk Civil 3d (1).svg" alt="Autodesk Civil 3D">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_Civil_3D.html" class="text-dark">Autodesk Civil 3D</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <!-- Course 2 -->
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_AutoCAD_MAP_3D.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/Autodesk Civil  map 3d.svg" alt="Autodesk AutoCAD MAP 3D">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_AutoCAD_MAP_3D.html" class="text-dark">Autodesk AutoCAD MAP 3D</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <!-- Course 3 -->
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_Infraworks.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="img/autodesk infraworks (1).svg" alt="Autodesk Infraworks">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_Infraworks.html" class="text-dark">Autodesk Infraworks</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <!-- Course 4 -->
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_Revit_Architecture.html">
+        
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/revit (1).svg" alt="Autodesk Revit Architecture">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_Revit_Architecture.html" class="text-dark">Autodesk Revit Architecture</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <!-- Course 5 -->
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_Revit_Structure.html">
+                        
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/revit structure.svg" alt="Autodesk Revit Structure">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_Revit_Structure.html" class="text-dark">Autodesk Revit Structure</a></h5>
+                        </div></a>
+                
+                    </div>
+                </div>
+                <!-- Course 6 -->
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_Revit_MEP.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/revit mep.svg" alt="Autodesk Revit MEP">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_Revit_MEP.html" class="text-dark">Autodesk Revit MEP</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <!-- Course 7 -->
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_Revit_Dynamo.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/revitxdynamo.svg" alt="Autodesk Revit Dynamo">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_Revit_Dynamo.html" class="text-dark">Autodesk Revit Dynamo</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <!-- Course 8 -->
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Trimble_Sketchup_Pro.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/sketchpro.svg" alt="Trimble Sketchup Pro">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Trimble_Sketchup_Pro.html" class="text-dark">Trimble Sketchup Pro</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Primavera.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/primavera.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Primavera.html" class="text-dark">Primavera</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Trimble_Tekla_Structure.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/timble tekla structure.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Trimble_Tekla_Structure.html" class="text-dark">Trimble Tekla Structure</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_Raster_Design.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/autocad raster design.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_Raster_Design.html" class="text-dark">Autodesk Raster Design</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_MudBox.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/autodesk mudbox.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_MudBox.html" class="text-dark">Autodesk MudBox</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_Sketchbook_Designer.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/sketchpro.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_Sketchbook_Designer.html" class="text-dark">Autodesk Sketchbook Designer</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Bentley_MicroStation.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/bentleymicro.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Bentley_MicroStation.html" class="text-dark">Bentley MicroStation</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Bentley_Staad_Pro.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/bentley.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Bentley_Staad_Pro.html" class="text-dark">Bentley Staad Pro</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Bentley_MxRoad.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/bentley mx.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Bentley_MxRoad.html" class="text-dark">Bentley MxRoad</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_Navisworks_Manage.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/autodesk naviswork.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_Navisworks_Manage.html" class="text-dark">Autodesk Navisworks Manage</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Rhino.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/rhino-1.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Rhino.html" class="text-dark">Rhino</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Grasshopper.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/grasshopper.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Grasshopper.html" class="text-dark">Grasshopper</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Microsoft_Project.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/Microsoft project.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Microsoft_Project.html" class="text-dark">Microsoft Project</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Autodesk_BIM_360_Products.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/autodesk bim360.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Autodesk_BIM_360_Products.html" class="text-dark">Autodesk BIM 360 Products</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Adobe_Acrobat_Professional.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/abode acrobat.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Adobe_Acrobat_Professional.html" class="text-dark">Adobe Acrobat Professional</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="CorelDraw.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/coral draw.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="CorelDraw.html" class="text-dark">Corel Draw</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Lumion.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/lumion.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Lumion.html" class="text-dark">Lumion</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Enscape.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/enscape.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Enscape.html" class="text-dark">Enscape</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Vray.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/vray.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Vray.html" class="text-dark">Vray</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="TwinMotion.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/twinmotion.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="TwinMotion.html" class="text-dark">Twin Motion</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="3DS_MAX.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/3ds max.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="3DS_MAX.html" class="text-dark">3DS MAX</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <a href="Maya.html">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <img class="img-fluid" src="/img/maya.svg" alt="">
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="Maya.html" class="text-dark">Maya</a></h5>
+                        </div></a>
+                    </div>
+                </div>
+                
+                <!-- Add more courses as needed following the same structure -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Courses End -->
+
+
+    <!-- Footer Start -->
+    <div id="footer"></div>
+    <script>
+        fetch("footer.html")
+            .then(response => response.text())
+            .then(data => document.getElementById("footer").innerHTML = data);
+    </script>
+    
+    
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

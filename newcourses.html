@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Courses</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <script>
+        // Load Navbar
+        fetch('navbar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('navbar').innerHTML = html;
+                loadAuthScript();
+            })
+            .catch(err => console.error('Error loading navbar:', err));
+    
+        async function loadAuthScript() {
+            const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+            const { getAuth, onAuthStateChanged, signOut } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+    
+            const firebaseConfig = {
+                apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+                authDomain: "roshanitechpvttld.firebaseapp.com",
+                projectId: "roshanitechpvttld",
+                storageBucket: "roshanitechpvttld.firebasestorage.app",
+                messagingSenderId: "970133074105",
+                appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+                measurementId: "G-YH98JTDL7W"
+            };
+    
+            const auth = getAuth(initializeApp(firebaseConfig));
+    
+            onAuthStateChanged(auth, user => {
+                document.getElementById("user-info").classList.toggle("d-none", !user);
+                document.getElementById("login-link").classList.toggle("d-none", user);
+                if (user) document.getElementById("user-name").innerText = user.displayName || "User";
+            });
+    
+            document.getElementById("logout-btn").addEventListener("click", async () => {
+                await signOut(auth);
+                localStorage.removeItem("username");
+                window.location.href = "index.html";
+            });
+        }
+    </script>
+    <div class="container py-5">
+        <h2>New Courses</h2>
+        <div id="coursesList" class="row">
+            <!-- Courses will be added here dynamically -->
+        </div>
+    </div>
+
+    <!-- Firebase & Firestore Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+            authDomain: "roshanitechpvttld.firebaseapp.com",
+            projectId: "roshanitechpvttld",
+            storageBucket: "roshanitechpvttld.firebasestorage.app",
+            messagingSenderId: "970133074105",
+            appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+            measurementId: "G-YH98JTDL7W"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Function to Fetch and Display Courses
+        function fetchCourses() {
+            let coursesList = document.getElementById('coursesList');
+            coursesList.innerHTML = ''; // Clear previous content
+
+            onSnapshot(collection(db, "courses"), (snapshot) => {
+                coursesList.innerHTML = ''; // Clear previous data
+                snapshot.forEach((doc) => {
+                    let course = doc.data();
+                    let courseElement = `
+                        <div class="col-md-4">
+                            <div class="card my-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">${course.title}</h5>
+                                    <p class="card-text">${course.description}</p>
+                                    <p class="card-text"><strong>Price:</strong> $${course.price}</p>
+                                </div>
+                            </div>
+                        </div>`;
+                    coursesList.innerHTML += courseElement;
+                });
+            });
+        }
+
+        // Fetch courses when page loads
+        fetchCourses();
+    </script>
+     <!-- footer start -->
+   <div id="footer"></div>
+   <script>
+       fetch("footer.html")
+           .then(response => response.text())
+           .then(data => document.getElementById("footer").innerHTML = data);
+   </script>
+<!-- footer end -->
+</body>
+</html>

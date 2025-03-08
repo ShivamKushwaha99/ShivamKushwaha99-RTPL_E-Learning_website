@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Roshani Technologies : Courses</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/roshni_tech_logo.png" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Navbar Start -->
+    <div id="navbar"></div>
+
+    <script>
+        // Load Navbar
+        fetch('navbar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('navbar').innerHTML = html;
+                loadAuthScript();
+            })
+            .catch(err => console.error('Error loading navbar:', err));
+    
+        async function loadAuthScript() {
+            const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+            const { getAuth, onAuthStateChanged, signOut } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+    
+            const firebaseConfig = {
+                apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+                authDomain: "roshanitechpvttld.firebaseapp.com",
+                projectId: "roshanitechpvttld",
+                storageBucket: "roshanitechpvttld.firebasestorage.app",
+                messagingSenderId: "970133074105",
+                appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+                measurementId: "G-YH98JTDL7W"
+            };
+    
+            const auth = getAuth(initializeApp(firebaseConfig));
+    
+            onAuthStateChanged(auth, user => {
+                document.getElementById("user-info").classList.toggle("d-none", !user);
+                document.getElementById("login-link").classList.toggle("d-none", user);
+                if (user) document.getElementById("user-name").innerText = user.displayName || "User";
+            });
+    
+            document.getElementById("logout-btn").addEventListener("click", async () => {
+                await signOut(auth);
+                localStorage.removeItem("username");
+                window.location.href = "index.html";
+            });
+        }
+    </script>
+    <!-- Navbar End -->
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Courses</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="index.html">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Courses</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+             <!-- Placeholder for Authorized Dealers Slider -->
+<div id="authorized-dealer-slider"></div>
+
+<script>
+  // Load Authorized Dealers Slider
+  fetch('/authorizeddealer.html') // Adjust the path as needed
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('authorized-dealer-slider').innerHTML = data;
+    })
+    .catch(error => console.error('Error loading the slider:', error));
+</script>
+  
+   <!--Authorized Dealers Slider end -->
+
+    <!-- Courses Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center px-3">Popular Courses</h6>
+                <h1 class="mb-5" style="color: #fb873f;">Explore new online courses</h1>
+            </div>
+            <div class="row g-4 py-2">
+               <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="course-item shadow overflow-hidden position-relative" 
+        style="height: 250px; transition: all 0.5s ease-in-out;">
+
+        <!-- Front Side (Image & Course Name) -->
+        <div class="front-content position-absolute w-100 h-100 text-center d-flex flex-column align-items-center justify-content-start bg-white" 
+            style="transition: all 0.5s ease-in-out;">
+            <a href="nav_nirman.html" class="w-100">
+                <img class="img-fluid w-100 h-100" src="img/BIM.webp" alt="" style="object-fit: cover;">
+            </a>
+            <h5 class="mt-2 position-absolute bottom-0 w-100 bg-white p-2">
+                <a href="nav_nirman.html" class="text-dark">Nav Nirman <br>(Professional BIM Course)</a>
+            </h5>
+        </div>
+
+        <!-- Back Side (Course Content) -->
+        <div class="back-content position-absolute w-100 h-100 text-light d-flex flex-column justify-content-center align-items-center px-3" 
+            style="opacity: 0; transform: translateY(20px); transition: all 0.5s ease-in-out; background-color: #002147;">
+            <p class="text-center">BIM is revolutionizing the construction industry by enabling real-time collaboration and 3D modeling.</p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.course-item').forEach(item => {
+        item.addEventListener('mouseover', () => {
+            item.querySelector('.front-content').style.opacity = "0";
+            item.querySelector('.front-content').style.transform = "translateY(-20px)";
+            item.querySelector('.back-content').style.opacity = "1";
+            item.querySelector('.back-content').style.transform = "translateY(0)";
+        });
+
+        item.addEventListener('mouseout', () => {
+            item.querySelector('.front-content').style.opacity = "1";
+            item.querySelector('.front-content').style.transform = "translateY(0)";
+            item.querySelector('.back-content').style.opacity = "0";
+            item.querySelector('.back-content').style.transform = "translateY(20px)";
+        });
+    });
+</script>
+
+                
+                
+                
+                
+                
+                
+                
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="lakshya_nirman.html" class="text-dark"><img class="img-fluid" src="img/NATA.webp" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="lakshya_nirman.html" class="text-dark">Lakshaya Nirman <br>(NATA Aspirants)</a></h5>
+                            <p>We prepare students for getting into architecture courses (B.ARCH, M.ARCH).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="rachnakar.html" class="text-dark"><img class="img-fluid" src="img/Rachnacar.jpg.webp" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="rachnakar.html" class="text-dark">Rachnakar</a></h5>
+                            <p>Forge your path in product design! Our innovative product design courses equip you with the skills to stand out and build a flourishing career.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="prayojanarthak.html" class="text-dark"><img class="img-fluid" src="img/prayoj.webp" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="prayojanarthak.html" class="text-dark">Prayojanarthak Nirman</a></h5>
+                            <p>Dominate the future of structures! Our innovative Structural Design Course equips you with cutting-edge skills to forge a remarkable career.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="code_yoddha.html" class="text-dark"><img class="img-fluid" src="img/code_yoddha.webp" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="code_yoddha.html" class="text-dark">Code Yoddha</a></h5>
+                            <p>Master the fundamentals of programming in Java, Python, C++, and C, along with software design principles, development methodologies, and problem-solving techniques to build a strong foundation for a successful career as a Code Yoddha.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="architecture.html" class="text-dark"><img class="img-fluid" src="img/architecture.png" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="architecture.html" class="text-dark">Architecture Courses</a></h5>
+                            <p>Learn the fundamentals of architecture, design principles, construction methods, and 3D modeling to build a strong foundation for a successful career in architecture.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="civil.html" class="text-dark"><img class="img-fluid" src="img/civil.jpeg" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="civil.html" class="text-dark">Civil Courses</a></h5>
+                            <p>Gain practical knowledge in structural design, surveying, construction materials, and geotechnical engineering to excel in the civil engineering industry.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="interior_design.html" class="text-dark"><img class="img-fluid" src="img/interior_design.png" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="interior_design.html" class="text-dark">Interior Designing Courses</a></h5>
+                            <p>Learn to design stunning, functional interiors with expert guidance, hands-on training, and industry-relevant skills in space planning, color theory, and 3D modeling.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="rendering.html" class="text-dark"><img class="img-fluid" src="img/Rander.webp" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="rendering.html" class="text-dark">Rendering Courses</a></h5>
+                            <p>Master photorealistic rendering to bring 3D models to life for architecture, product design, gaming, and animation with expert lighting, texturing, and visualization techniques.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="mechanical.html" class="text-dark"><img class="img-fluid" src="img/Mechanical.png" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="mechanical.html" class="text-dark">Mechanical Courses</a></h5>
+                            <p>Master the fundamentals of Mechanical Engineering with hands-on training in CAD, design, manufacturing, and automation to build a strong career in the industry.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="electrical.html" class="text-dark"><img class="img-fluid" src="img/eletrical.jpg" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="electrical.html" class="text-dark">Electrical Courses</a></h5>
+                            <p>Master essential electrical software like AutoCAD Electrical, ETAP, and more to design, analyze, and optimize electrical systems with hands-on training.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item shadow">
+                        <div class="position-relative overflow-hidden text-light image">
+                            <a href="common_courses.html" class="text-dark"><img class="img-fluid" src="img/common.webp" alt=""></a>
+                        </div>
+                        <div class="p-2 pb-0">
+                            <h5 class="mb-1"><a href="common_courses.html" class="text-dark">Common Courses</a></h5>
+                            <p>Forge your path in product design! Our innovative product design courses equip you with the skills to stand out and build a flourishing career.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Courses End -->
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="text-white mb-3">Quick Link</h4>
+                    <p><a class="text-light" href="about.html">About Us</a></p>
+                    <p><a class="text-light" href="contact.html">Contact Us</a></p>
+                    <p><a class="text-light" href="">Privacy Policy</a></p>
+                    <p><a class="text-light" href="">Terms & Condition</a></p>
+                    <p><a class="text-light" href="">FAQs & Help</a></p>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="text-white mb-3">Contact</h4>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>
+                        <span>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Technology+Park+Roshani+Near+Karelibaug+Water+Tank+Vadodara+Gujarat+India"
+                          target="_blank">
+                          Technology Park Roshani Near Karelibaug Water Tank, Vadodara, Gujarat, India
+                        </a>
+                      </span></p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i><span><a href="tel:+919408788205">+91 9408788205</a></span></p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i> <span><a href="mailto:roshani@roshani.net">roshani@roshani.net</a></span></p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href="https://x.com/roshanicomputer"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="https://www.facebook.com/roshanicomputerservices/"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="https://www.youtube.com/@ROSHNICOMPUTERSERVICES"><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="https://www.instagram.com/roshanitechnologiespvt.ltd/"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="text-white mb-3">Subscribe to our Newsletter</h4>
+                    <p>Subscribe now and join our growing community of learners committed to lifelong education! </p>
+                    <div class="position-relative mx-auto" style="max-width: 400px;">
+                        <form action="#">
+                            <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="email"
+                                placeholder="Your email" required>
+                            <button type="submit"
+                                class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2"><a
+                                    href="mailto:keertidvcorai@gmail.com">Subscribe</a></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="index.html">Roshani Technologies</a>, All Right Reserved.
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

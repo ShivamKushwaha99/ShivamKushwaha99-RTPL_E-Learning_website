@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+
+<body>
+    <div id="navbar"></div>
+
+    <script>
+        // Load Navbar
+        fetch('navbar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('navbar').innerHTML = html;
+                loadAuthScript();
+            })
+            .catch(err => console.error('Error loading navbar:', err));
+    
+        async function loadAuthScript() {
+            const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+            const { getAuth, onAuthStateChanged, signOut } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+    
+            const firebaseConfig = {
+                apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+                authDomain: "roshanitechpvttld.firebaseapp.com",
+                projectId: "roshanitechpvttld",
+                storageBucket: "roshanitechpvttld.firebasestorage.app",
+                messagingSenderId: "970133074105",
+                appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+                measurementId: "G-YH98JTDL7W"
+            };
+    
+            const auth = getAuth(initializeApp(firebaseConfig));
+    
+            onAuthStateChanged(auth, user => {
+                document.getElementById("user-info").classList.toggle("d-none", !user);
+                document.getElementById("login-link").classList.toggle("d-none", user);
+                if (user) document.getElementById("user-name").innerText = user.displayName || "User";
+            });
+    
+            document.getElementById("logout-btn").addEventListener("click", async () => {
+                await signOut(auth);
+                localStorage.removeItem("username");
+                window.location.href = "index.html";
+            });
+        }
+    </script>
+
+    <div class="container py-5">
+        <h2>Admin Dashboard</h2>
+
+        <!-- Add Course Form -->
+        <h4>Add New Course</h4>
+        <form id="addCourseForm">
+            <div class="form-group">
+                <label for="courseTitle">Course Title</label>
+                <input type="text" class="form-control" id="courseTitle" placeholder="Enter course title" required>
+            </div>
+            <div class="form-group">
+                <label for="courseDescription">Course Description</label>
+                <textarea class="form-control" id="courseDescription" placeholder="Enter course description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="coursePrice">Course Price</label>
+                <input type="text" class="form-control" id="coursePrice" placeholder="Enter course price (e.g., 0 for free)" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Course</button>
+        </form>
+
+        <hr>
+
+        <!-- Update Course Form -->
+        <h4>Update Course</h4>
+        <form id="updateCourseForm">
+            <div class="form-group">
+                <label for="updateCourseId">Course ID</label>
+                <input type="text" class="form-control" id="updateCourseId" placeholder="Enter course ID" required>
+            </div>
+            <div class="form-group">
+                <label for="updateCourseTitle">New Course Title</label>
+                <input type="text" class="form-control" id="updateCourseTitle" placeholder="Enter new course title" required>
+            </div>
+            <div class="form-group">
+                <label for="updateCourseDescription">New Course Description</label>
+                <textarea class="form-control" id="updateCourseDescription" placeholder="Enter new course description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="updateCoursePrice">New Course Price</label>
+                <input type="text" class="form-control" id="updateCoursePrice" placeholder="Enter new course price" required>
+            </div>
+            <button type="submit" class="btn btn-warning">Update Course</button>
+        </form>
+
+        <hr>
+
+        <!-- Remove Course Form -->
+        <h4>Remove Course</h4>
+        <form id="removeCourseForm">
+            <div class="form-group">
+                <label for="removeCourseId">Course ID</label>
+                <input type="text" class="form-control" id="removeCourseId" placeholder="Enter course ID" required>
+            </div>
+            <button type="submit" class="btn btn-danger">Remove Course</button>
+        </form>
+
+        <hr>
+
+        <!-- Add Advertisement Form -->
+        <h4>Add Advertisement</h4>
+        <form id="addAdForm">
+            <div class="form-group">
+                <label for="adTitle">Advertisement Title</label>
+                <input type="text" class="form-control" id="adTitle" placeholder="Enter advertisement title" required>
+            </div>
+            <div class="form-group">
+                <label for="adContent">Advertisement Content</label>
+                <textarea class="form-control" id="adContent" placeholder="Enter advertisement content" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Add Advertisement</button>
+        </form>
+    </div>
+
+    <!-- Firebase & Firestore Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+// Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+    authDomain: "roshanitechpvttld.firebaseapp.com",
+    projectId: "roshanitechpvttld",
+    storageBucket: "roshanitechpvttld.firebasestorage.app",
+    messagingSenderId: "970133074105",
+    appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+    measurementId: "G-YH98JTDL7W"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Function to Add Course to Firestore
+document.getElementById('addCourseForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    let courseTitle = document.getElementById('courseTitle').value;
+    let courseDescription = document.getElementById('courseDescription').value;
+    let coursePrice = document.getElementById('coursePrice').value;
+
+    try {
+        await addDoc(collection(db, "courses"), {
+            title: courseTitle,
+            description: courseDescription,
+            price: coursePrice,
+            createdAt: new Date()
+        });
+
+        Swal.fire('Success', 'Course added successfully!', 'success');
+        document.getElementById('addCourseForm').reset();
+    } catch (error) {
+        Swal.fire('Error', 'Failed to add course: ' + error.message, 'error');
+    }
+});
+
+// Function to Fetch Courses and Update the Dropdown
+async function fetchCourses() {
+    let dropdownMenu = document.getElementById('coursesDropdownMenu');
+    dropdownMenu.innerHTML = ''; // Clear previous data
+
+    const querySnapshot = await getDocs(collection(db, "courses"));
+
+    querySnapshot.forEach((doc) => {
+        let course = doc.data();
+        let courseItem = document.createElement('a');
+        courseItem.classList.add('dropdown-item');
+        courseItem.textContent = course.title;
+        dropdownMenu.appendChild(courseItem);
+    });
+}
+
+// Real-time Updates for Courses (Auto Update Dropdown)
+function listenForCourseUpdates() {
+    let dropdownMenu = document.getElementById('coursesDropdownMenu');
+
+    onSnapshot(collection(db, "courses"), (snapshot) => {
+        dropdownMenu.innerHTML = ''; // Clear previous data
+        snapshot.forEach((doc) => {
+            let course = doc.data();
+            let courseItem = document.createElement('a');
+            courseItem.classList.add('dropdown-item');
+            courseItem.textContent = course.title;
+            dropdownMenu.appendChild(courseItem);
+
+            document.getElementById('removeCourseForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    let courseId = document.getElementById('removeCourseDropdown').value;
+
+    if (!courseId) {
+        Swal.fire('Error', 'Please select a course to remove.', 'error');
+        return;
+    }
+
+    try {
+        await deleteDoc(doc(db, "courses", courseId));
+        Swal.fire('Success', 'Course removed successfully!', 'success');
+        
+        // Refresh dropdown after deletion
+        fetchCourses();
+    } catch (error) {
+        Swal.fire('Error', 'Failed to remove course: ' + error.message, 'error');
+    }
+});
+
+        });
+    });
+}
+import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+// Fetch courses and populate the dropdown
+async function fetchCourses() {
+    let dropdown = document.getElementById('removeCourseDropdown');
+    dropdown.innerHTML = '<option value="">Select a course</option>'; // Reset dropdown
+
+    const querySnapshot = await getDocs(collection(db, "courses"));
+    querySnapshot.forEach((doc) => {
+        let course = doc.data();
+        let option = document.createElement('option');
+        option.value = doc.id; // Store Firestore document ID
+        option.textContent = course.title;
+        dropdown.appendChild(option);
+    });
+}
+
+// Call fetchCourses when the page loads
+fetchCourses();
+
+
+listenForCourseUpdates();
+
+
+
+    </script>
+</body>
+</html>

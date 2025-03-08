@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="google-translate-customization" content="9f841e7780177523-3214ceb76f765f38-gc38c6fe6f9d06436-c">
+    </meta>
+
+    <title>Roshani Technologies : Online Courses</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/roshni_tech_logo.png" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+<style>
+    .tabs ul li {
+        list-style-type: none;
+    }
+
+    .tabs ul li a {
+        font-size: 25px;
+        color: #4e4e4e !important;
+        font-weight: 500;
+    }
+
+    .tabs ul li a.active {
+        color: #f69050 !important;
+    }
+
+    .tabs ul li a:hover {
+        color: #f69050 !important;
+    }
+
+    #more {
+        display: none;
+    }
+
+    button {
+        border: none;
+        color: #f69050;
+    }
+</style>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+     <!-- Navbar Start -->
+     <div id="navbar"></div>
+
+     <script>
+         // Load Navbar
+         fetch('navbar.html')
+             .then(res => res.text())
+             .then(html => {
+                 document.getElementById('navbar').innerHTML = html;
+                 loadAuthScript();
+             })
+             .catch(err => console.error('Error loading navbar:', err));
+     
+         async function loadAuthScript() {
+             const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+             const { getAuth, onAuthStateChanged, signOut } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+     
+             const firebaseConfig = {
+                 apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+                 authDomain: "roshanitechpvttld.firebaseapp.com",
+                 projectId: "roshanitechpvttld",
+                 storageBucket: "roshanitechpvttld.firebasestorage.app",
+                 messagingSenderId: "970133074105",
+                 appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+                 measurementId: "G-YH98JTDL7W"
+             };
+     
+             const auth = getAuth(initializeApp(firebaseConfig));
+     
+             onAuthStateChanged(auth, user => {
+                 document.getElementById("user-info").classList.toggle("d-none", !user);
+                 document.getElementById("login-link").classList.toggle("d-none", user);
+                 if (user) document.getElementById("user-name").innerText = user.displayName || "User";
+             });
+     
+             document.getElementById("logout-btn").addEventListener("click", async () => {
+                 await signOut(auth);
+                 localStorage.removeItem("username");
+                 window.location.href = "index.html";
+             });
+         }
+     </script>
+    <!-- Navbar End -->
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Course</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="index.html">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="courses.html">Course</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Bentley MxRoad
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+             <!-- Placeholder for Authorized Dealers Slider -->
+<div id="authorized-dealer-slider"></div>
+
+<script>
+  // Load Authorized Dealers Slider
+  fetch('/authorizeddealer.html') // Adjust the path as needed
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('authorized-dealer-slider').innerHTML = data;
+    })
+    .catch(error => console.error('Error loading the slider:', error));
+</script>
+  
+   <!--Authorized Dealers Slider end -->
+
+
+    <!-- Course Detail Start -->
+    <div class="container-xxl py-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 wow fadeInUp">
+
+                    <div class="container">
+                        <div class="row g-5 justify-content-center">
+
+                            <div class="col-lg-12 wow fadeInUp" data-wow-delay="0.3s">
+                                <h2>Bentley MxRoad </h2>
+                                <p>**Bentley MXROAD** is a road design and modeling software used for planning,
+                                    analyzing, and designing highways, corridors, and transportation infrastructure.</p>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="container-fluid wow fadeInUp mt-5 tabs">
+
+
+                        <!-- Tab panes -->
+                        <div class="tab-content mt-4">
+
+                            <div class="tab-pane container active" id="Overview">
+                                <h2>About this Course</h2>
+                                <p>The **Bentley MXROAD** course provides in-depth training on road design, modeling,
+                                    and analysis for transportation infrastructure projects. Participants will learn to
+                                    create alignment designs, generate 3D road models, and perform terrain analysis
+                                    using MXROAD’s powerful engineering tools. The course covers essential workflows
+                                    such as cross-section detailing, earthwork calculations, and integration with GIS
+                                    and CAD data for accurate project execution. Ideal for civil engineers,
+                                    transportation planners, and road designers, this course enhances efficiency in
+                                    roadway planning and development. By the end, learners will be proficient in using
+                                    MXROAD for precise and optimized road design solutions.</p>
+
+
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-md-6 shadow wow fadeInUp" data-wow-delay="0.3s">
+
+                    <div class="image text-center">
+                        <img class="img-fluid mt-2" src="/img/bentley mx.svg" alt="" height="200px" width="500px">
+                    </div>
+
+                    <h4 class="mt-2 p-2">₹
+                        <small>1,00,000</small>
+                    </h4>
+
+
+                    <div class="buttons">
+
+                        <a href="#" class="text-decoration-none text-white btn p-3 w-100 mb-2">ENROLL NOW</a>
+
+
+
+                    </div>
+                    <div class="list mt-2">
+
+                        <div class="list4 d-flex justify-content-between pt-2 border-bottom">
+                            <p><i class="fa fa-google-translate"></i> Language</p>
+                            <p>English</p>
+                        </div>
+                        <div class="list7 d-flex justify-content-between pt-2 border-bottom">
+                            <p><i class="fa fa-certificate"></i> Certificate</p>
+                            <p>Yes</p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Course Detail End -->
+
+
+    <!-- Footer Start -->
+    <div id="footer"></div>
+    <script>
+        fetch("footer.html")
+            .then(response => response.text())
+            .then(data => document.getElementById("footer").innerHTML = data);
+    </script>
+    
+    
+    <!-- Footer End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

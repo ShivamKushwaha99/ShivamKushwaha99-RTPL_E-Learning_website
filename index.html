@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="google-translate-customization" content="9f841e7780177523-3214ceb76f765f38-gc38c6fe6f9d06436-c">
+    </meta>
+
+    <title>Roshani Technologies : Online Courses</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/roshni_tech_logo.png" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+   
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <p class="m-0 fw-bold" style="font-size: 25px;">
+                <img src="img/roshni_tech_logo.png" alt="" height="50px"> 
+                <!-- <span style="color: black">ROSHANI TECHNOLOGIES PVT LTD</span> -->
+            </p>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <a href="about.html" class="nav-item nav-link">About</a>
+                <a href="blog.html" class="nav-item nav-link">blog</a>
+                <a href="courses.html" class="nav-item nav-link">Courses</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <div class="dropdown-menu fade-down m-0">
+                        <a href="team.html" class="dropdown-item">Our Team</a>
+                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                        <a href="franchise.html" class="dropdown-item">Franchise</a>
+                        <a href="newcourses.html" class="dropdown-item">New Courses</a>
+                    </div>
+                </div>
+                <a href="contact.html" class="nav-item nav-link">Contact</a>
+    
+                <!-- User Profile Section -->
+                <div id="user-info" class="nav-item dropdown d-none">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <!-- <img id="user-photo" src="ProfileEdit.html" alt="User" class="rounded-circle" width="30" height="30"> -->
+                        <span id="user-name"></span>
+                    </a>
+                    <div class="dropdown-menu fade-down m-0">
+                        <a href="ProfileEdit.html" class="dropdown-item">Edit Profile</a>
+                        <a href="#" class="dropdown-item">My Courses</a>
+                        <a href="#" id="logout-btn" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+    
+                <!-- Login Button -->
+                <a href="login.html" id="login-link" class="nav-item nav-link"><i class="fa fa-user"></i></a>
+            </div>
+        </div>
+    </nav>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+    authDomain: "roshanitechpvttld.firebaseapp.com",
+    projectId: "roshanitechpvttld",
+    storageBucket: "roshanitechpvttld.firebasestorage.app",
+    messagingSenderId: "970133074105",
+    appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+    measurementId: "G-YH98JTDL7W"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const userInfo = document.getElementById("user-info");
+const userName = document.getElementById("user-name");
+const userPhoto = document.getElementById("profileImage");
+const loginLink = document.getElementById("login-link");
+const logoutBtn = document.getElementById("logout-btn");
+
+// Check if user is logged in
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        userInfo.classList.remove("d-none"); // Show user info
+        loginLink.classList.add("d-none"); // Hide login button
+
+        // Get username (Firebase or fallback to LocalStorage)
+        const username = user.displayName || localStorage.getItem("username") || "User";
+        userName.innerText = username;
+
+        // Set profile picture or placeholder
+        userPhoto.src = user.photoURL || "https://via.placeholder.com/30";
+    } else {
+        userInfo.classList.add("d-none"); // Hide user info
+        loginLink.classList.remove("d-none"); // Show login button
+    }
+});
+
+// Logout Functionality
+logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    localStorage.removeItem("username"); // Clear stored username
+    window.location.href = "index.html"; // Redirect after logout
+});
+
+    </script>
+    
+    <!-- Navbar End -->
+
+
+    <!-- Carousel Start -->
+    <div class="container-fluid p-0 mb-4">
+        <div class="owl-carousel header-carousel position-relative">
+            <div class="owl-carousel-item position-relative">
+                <img class="img-fluid" src="img/carousel-1.jpg" alt="">
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
+                    style="background: rgba(24, 29, 56, .7);">
+                    <div class="container">
+                        <div class="row justify-content-start">
+                            <div class="col-sm-10 col-lg-8">
+                                <h5 class=" text-uppercase mb-3 animated slideInDown" style="color: #fb873f;">Best
+                                    E-learning platform</h5>
+                                <h1 class="display-3 text-white animated slideInDown">Learn Job ready skills from 
+                                    online courses with certificates</h1>
+                                <p class=" text-white mb-4 pb-2">Explore a wide range of courses designed to enhance
+                                    your expertise in technology, business, arts, and more. Start learning today!</p>
+                                <a href="about.html"
+                                    class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read More</a>
+                                <a href="signup.html" id="join-now-btn" 
+                                    class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="owl-carousel-item position-relative">
+                <img class="img-fluid" src="img/carousel-2.jpg" alt="">
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center"
+                    style="background: rgba(24, 29, 56, .7);">
+                    <div class="container">
+                        <div class="row justify-content-start">
+                            <div class="col-sm-10 col-lg-8">
+                                <h5 class=" text-uppercase mb-3 animated slideInDown" style="color: #fb873f;">Welcome to
+                                    Roshani Technologies</h5>
+                                <h1 class="display-3 text-white animated slideInDown">Interactive Learning Experience
+                                </h1>
+                                <p class=" text-white mb-4 pb-2">Engage with interactive lessons and
+                                    projects. Experience hands-on learning that keeps you motivated and inspired.</p>
+                                <a href="about.html"
+                                    class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read More</a>
+                                <a href="signup.html" id="join-now-btn" 
+                                    class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+            authDomain: "roshanitechpvttld.firebaseapp.com",
+            projectId: "roshanitechpvttld",
+            storageBucket: "roshanitechpvttld.firebasestorage.app",
+            messagingSenderId: "970133074105",
+            appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+            measurementId: "G-YH98JTDL7W"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app); // Initialize authentication
+    
+        // Select all "Join Now" buttons
+        const joinNowBtns = document.querySelectorAll("#join-now-btn");
+    
+        // Check user authentication state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                joinNowBtns.forEach((btn) => btn.style.display = "none"); // Hide button if logged in
+            }
+        });
+    </script>
+    
+    <!-- Carousel End -->
+
+
+        <!-- Placeholder for Authorized Dealers Slider -->
+<div id="authorized-dealer-slider"></div>
+
+<script>
+  // Load Authorized Dealers Slider
+  fetch('/authorizeddealer.html') // Adjust the path as needed
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('authorized-dealer-slider').innerHTML = data;
+    })
+    .catch(error => console.error('Error loading the slider:', error));
+</script>
+  
+   <!--Authorized Dealers Slider end -->
+
+
+    <!-- About Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="img-fluid position-absolute w-70 h-90" src="img\Dipak_sir.jpeg" alt=""
+                            style="object-fit: cover;">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <h6 class="section-title bg-white text-start pe-3">About Us</h6>
+                    <h1 class="mb-4" style="color: #a12c2f;">Welcome to Roshani Technologies</h1>
+                    <p class="mb-4">Roshni Technologies, founded in 1988 by Mr. Dipak Shah, stands as a leading provider of comprehensive 
+                        consulting and training solutions.</p>
+                    <p class="mb-4"> Welcome to Roshani Technologies, Our commitment extends to enhancing productivity and streamlining processes for Design ,analysis 
+                        and manufacturing through the effective implementation of IT systems.</p>
+                    <div class="row gy-2 gx-4 mb-4">
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right  me-2"></i>Expert Instructors</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right me-2"></i>Live Interactive Sessions</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right me-2"></i>Comprehensive Course Catalog</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right me-2"></i>Community Engagement</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right me-2"></i>Personalized Learning Paths</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right me-2"></i>Certification and Recognition</p>
+                        </div>
+                    </div>
+                    <a class="btn text-light py-3 px-5 mt-2" href="about.html">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+     <!-- Service Start -->
+     <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-2 text-center">
+                <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
+                    <h1 style="color: #a12c2f;">Invest in your professional goals with Roshani Technologies</h1><br>
+                </div><br>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="service-item text-center pt-3 shadow">
+                        <div class="p-4">
+                            <img src="img/icon1.png" alt="" width="60px" class="mb-4">
+                            <h5 class="mb-3">Industry-Expert Instructors</h5>
+                            <p>Learn from professionals with hands-on industry experience.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="service-item text-center pt-3 shadow">
+                        <div class="p-4">
+                            <img src="img/icon2.png" alt="" width="60px" class="mb-4">
+                            <h5 class="mb-3">Live Interactive Classes</h5>
+                            <p>Engage with expert instructors in real-time, ask questions, and get instant feedback.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="service-item text-center pt-3 shadow">
+                        <div class="p-4">
+                            <img src="img/icon3.png" alt="" width="60px" class="mb-4">
+                            <h5 class="mb-3">Flexible learning</h5>
+                            <p>Attend classes at your convenience and learn at your own pace.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+                    <div class="service-item text-center pt-3 shadow">
+                        <div class="p-4">
+                            <img src="img/icon4.png" alt="" width="60px" class="mb-4">
+                            <h5 class="mb-3">Certifications</h5>
+                            <p>Get certified upon course completion and boost your career prospects</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Service End -->
+
+<!-- popup box -->
+
+<div id="welcomeBox" style="
+     display: none; /*Initially hidden */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    padding: 30px;
+    z-index: 1000;
+">
+    <img src="/img/Dipak_sir.jpeg" alt="Welcome Image" style="
+        width: 80%;
+        height: 150px;
+        object-fit: contain;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    ">
+    <h2 style="margin-top: 10px;"> Welcome to Roshani Technologies</h2>
+    <p id="welcomeMessage">Thank you for logging in.</p>
+    <button onclick="closeWelcomeBox()" style="
+        padding: 10px 20px;
+        border: none;
+        background: #ff4b5c;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+    ">Close</button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAAD3aCNvrYsQyxL7daWlGnlmAoKzmqL_E",
+        authDomain: "roshanitechpvttld.firebaseapp.com",
+        projectId: "roshanitechpvttld",
+        storageBucket: "roshanitechpvttld.firebasestorage.app",
+        messagingSenderId: "970133074105",
+        appId: "1:970133074105:web:5ceed2dbd9bd462bf66b68",
+        measurementId: "G-YH98JTDL7W"
+    };
+
+    const auth = getAuth(initializeApp(firebaseConfig));
+
+    function showWelcomeBox(username) {
+        document.getElementById("welcomeMessage").innerText = `Thank you ${username}, for logging in.`;
+        document.getElementById("welcomeBox").style.display = "block";
+    }
+
+    function closeWelcomeBox() {
+        document.getElementById("welcomeBox").style.display = "none";
+        sessionStorage.setItem("welcomeBoxShown", "true"); // Ensure it doesn't show again this session
+    }
+
+    // Attach function to window so the button can access it
+    window.closeWelcomeBox = closeWelcomeBox;
+
+    // Show popup only if it hasn't been shown in this session
+    document.addEventListener("DOMContentLoaded", function () {
+        if (!sessionStorage.getItem("welcomeBoxShown")) {
+            onAuthStateChanged(auth, user => {
+                if (user) {
+                    showWelcomeBox(user.displayName || "User");
+                }
+            });
+        }
+    });
+</script>
+
+
+
+   <!-- Courses Start -->
+   <div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center px-3">Popular Courses</h6>
+            <h1 class="mb-5" style="color: #fb873f;">Explore new online courses</h1>
+        </div>
+
+        
+        <div class="row g-4 py-2" >
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s" >
+                <div class="course-item shadow">
+                   <a href="nav_nirman.html"> <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/BIM.webp" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="nav_nirman.html" class="text-dark">Nav Nirman <br>(Professional BIM Course)</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow">
+                    <a href="lakshya_nirman.html">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/NATA.webp" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="lakshya_nirman.html" class="text-dark">Lakshaya Nirman <br>(NATA Aspirants)</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow"><a href="rachnakar.html">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/Rachnacar.jpg.webp" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="rachnakar.html" class="text-dark">Rachnakar</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow"><a href="prayojanarthak.html">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/prayoj.webp" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="prayojanarthak.html" class="text-dark">Prayojanarthak Nirman</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow">
+                    <a href="code_yoddha.html">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/code_yoddha.webp" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="code_yoddha.html" class="text-dark">Code Yoddha</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow">
+                    <a href="architecture.html">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/architecture.png" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="architecture.html" class="text-dark">Architecture Courses</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow">
+                    <a href="civil.html">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/civil.jpeg" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="civil.html" class="text-dark">Civil Courses</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow">
+                    <a href="interior_design.html"></a>
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/interior_design.png" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="interior_design.html" class="text-dark">Interior Designing Courses</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow">
+                    <a href="rendering.html">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/Rander.webp" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="rendering.html" class="text-dark">Rendering Courses</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow">
+                    <a href="mechanical.html">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/Mechanical.png" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="mechanical.html" class="text-dark">Mechanical Courses</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow">
+                    <a href="electrical.html">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/eletrical.jpg" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="electrical.html" class="text-dark">Electrical Courses</a></h5>
+                    </div></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item shadow">
+                    <a href="common_courses.html">
+                    <div class="position-relative overflow-hidden text-light image">
+                        <img class="img-fluid" src="img/common.webp" alt="">
+                    </div>
+                    <div class="p-2 pb-0">
+                        <h5 class="mb-1"><a href="common_courses.html" class="text-dark">Common Courses</a></h5>
+                    </div></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="container text-center">
+        <a class="btn text-light py-3 px-5 mt-2 mb-5" href="courses.html">All Courses</a>
+    </div>
+    <!-- Courses End -->
+
+     <!-- Banner-1 Start -->
+     <div class="container-xxl py-5 pt-5 bg-light">
+        <div class="container">
+            <div class="row g-5 ">
+                <div class="col-lg-6 p-5 wow fadeInUp" data-wow-delay="0.3s">
+
+                    <h1 class="mb-4" style="color: #a12c2f;">Explore Courses</h1>
+                    <p class="mb-4">Start your online learning journey at Roshani Technologies PVT LTD.</p>
+
+                    <a class="btn text-light py-3 px-5 mt-2" href="signup.html">Start Now</a>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="img-fluid position-absolute w-100 h-100" src="img\explore_more.jpg" alt=""
+                            style="object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Banner-1 End -->
+
+
+
+    <!-- FAQ Start  -->
+    <div class="container-xxl py-5 category">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                
+                <h1 class="mb-5">Frequently Asked Questions</h1>
+            </div>
+            <div class="row g-2">
+                <div class="col-12">
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                          <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                What is the Roshani Technologies PVT LTD ?
+                            </button>
+                          </h2>
+                          <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                Roshani Technologies PVT LTD is an initiative taken by Dipak Sir, where we offer 1000+ online courses in cutting-edge technologies and have successfully enrolled a whopping  Million+ learners across all domains.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Who can join the courses?
+                            </button>
+                          </h2>
+                          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                Our courses are designed for students, professionals, engineers, designers, and anyone looking to gain expertise in industry-standard software.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Do you provide certification after course completion?
+                            </button>
+                          </h2>
+                          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                Yes, we provide an industry-recognized certification upon successful completion of the course.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                How can I get support during the course?
+                              </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    We provide dedicated support via email, WhatsApp, and phone. Our instructors and technical team are always ready to assist you.       
+                                </div>
+                            </div>
+                          </div>
+                          <div class="accordion-item">
+                            <h2 class="accordion-header">
+                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                Will I get placement assistance?
+                              </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    Yes, we offer job assistance, resume building, and interview preparation for select courses.       
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FAQ End  -->
+
+    <!-- Footer Start -->
+    <div id="footer"></div>
+    <script>
+        fetch("footer.html")
+            .then(response => response.text())
+            .then(data => document.getElementById("footer").innerHTML = data);
+    </script>
+    
+    
+    <!-- Footer End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
